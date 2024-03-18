@@ -1,46 +1,35 @@
-import Animated, {
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-  Easing,
-} from "react-native-reanimated";
-import { View, Button } from "react-native";
+// In App.js in a new project
 
-export default function AnimatedStyleUpdateExample(props) {
-  const randomWidth = useSharedValue(10);
+import * as React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './screens/LoginScreen';
+import SignupScreen from './screens/SignupScreen';
+import CounterScreen from './screens/CounterScreen';
+import { Provider } from 'react-redux';
 
-  const config = {
-    duration: 500,
-    easing: Easing.bezier(0.5, 0.01, 0, 1),
-  };
+// import store from './context/store';
+import {store} from './store/store'
 
-  const style = useAnimatedStyle(() => {
-    return {
-      width: withTiming(randomWidth.value, config),
-    };
-  });
+const Stack = createNativeStackNavigator();
 
+function App() {
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Animated.View
-        style={[
-          { width: 100, height: 80, backgroundColor: "black", margin: 30 },
-          style,
-        ]}
-      />
-      <Button
-        title="toggle"
-        onPress={() => {
-          randomWidth.value = Math.random() * 350;
-        }}
-      />
-    </View>
+
+    <Provider store={store}>
+
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Counter' screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="SignUp" component={SignupScreen} />
+          <Stack.Screen name="Counter" component={CounterScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+          
+    </Provider>
+
   );
 }
+
+export default App;
